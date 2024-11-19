@@ -1,4 +1,4 @@
-import datetime, sys, questionary, os
+import sys, questionary, os
 from loguru import logger
 
 from core import *
@@ -62,23 +62,8 @@ def main():
 
 
 if __name__ == "__main__":
-    if not os.path.exists("data/keys.txt"):
-        open("data/keys.txt", "w").close()
-        logger.critical(
-            f"Fill in the wallet list! 👉 {os.path.join(os.getcwd(), 'data/keys.txt')}"
-        )
-        sys.exit(0)
-
-    logger.remove()
-    logs_format = "<white>{time:HH:mm:ss}</white> | <bold><level>{level: <7}</level></bold> | <level>{message}</level>"
-    logger.add(sink=sys.stdout, format=logs_format)
-    logger.add(
-        sink=f'data/logs/{datetime.datetime.today().strftime("%Y-%m-%d")}.log',
-        format=logs_format,
-    )
-
     logger.info("-" * 50)
-    sys.stdout.write("\033[2J\033[H") # clear console
+    sys.stdout.write("\033[2J\033[H")  # clear console
     sys.stdout.flush()
 
     WALLETS = [Wallet(i, key) for i, key in enumerate(KEYS, 1)]

@@ -1,10 +1,26 @@
-import json, os
+import json, os, sys, datetime
+from loguru import logger
 
 
-paths = ["data/checker", "data/logs"]
-for path in paths:
-    if not os.path.exists(path):
-        os.makedirs(path)
+logger.remove()
+logs_format = "<white>{time:HH:mm:ss}</white> | <bold><level>{level: <7}</level></bold> | <level>{message}</level>"
+logger.add(sink=sys.stdout, format=logs_format)
+logger.add(
+    sink=f'data/logs/{datetime.datetime.today().strftime("%Y-%m-%d")}.log',
+    format=logs_format,
+)
+
+
+if not os.path.exists("data/checker"):
+    os.makedirs("data/checker")
+if not os.path.exists("data/logs"):
+    os.makedirs("data/logs")
+if not os.path.exists("data/keys.txt"):
+    open("data/keys.txt", "w").close()
+    logger.critical(
+        f"Fill in the wallet list! 👉 {os.path.join(os.getcwd(), 'data/keys.txt')}"
+    )
+    sys.exit(0)
 
 
 with open("data/keys.txt", "r") as file:
